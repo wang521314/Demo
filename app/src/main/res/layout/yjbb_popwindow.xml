@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_custom_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="自定义日期"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_34_dip" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/date_cleardate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:text="清空日期"
+
+                    android:textSize="@dimen/dimen_34_dip" />
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/view_daily_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d2cccc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_daily"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/rv_pop_day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_pop_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:text="日历"
+                    android:textColor="@color/blue_navy"
+                    android:textSize="@dimen/dimen_34_dip" />
+
+                <View
+                    android:id="@+id/day_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/blue_navy" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rv_pop_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_pop_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:text="周历"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_34_dip" />
+
+
+                <View
+                    android:id="@+id/week_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#d2cccc" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rv_pop_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_pop_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:text="月历"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_34_dip" />
+
+
+                <View
+                    android:id="@+id/month_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#d2cccc" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rv_pop_seasons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_pop_seasons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:text="季度"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_34_dip" />
+
+                <View
+                    android:id="@+id/seasons_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#d2cccc" />
+            </RelativeLayout>
+        </LinearLayout>
+        <View
+            android:id="@+id/view_daily_line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="#d2cccc" />
+
+        <ViewStub
+            android:id="@+id/popview_stub_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/pop_daily_main" />
+
+        <ViewStub
+            android:id="@+id/popview_stub_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/item_pop_week" />
+
+
+        <ViewStub
+            android:id="@+id/popview_stub_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/popwindow_month_inflate"
+            android:layout="@layout/popwindow_month" />
+
+
+        <ViewStub
+            android:id="@+id/popview_stub_seasons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/popwindow_seasons" />
+
+    </LinearLayout>
+
+</RelativeLayout>

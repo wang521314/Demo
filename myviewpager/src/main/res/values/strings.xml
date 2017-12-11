@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">My ViewPager</string>
+    <string name="hello_world">hello_world</string>
+    <string name="btn_blth_connect">连接设备</string>
+    <string name="btn_blth_visiblity">设置蓝牙可见性</string>
+    <string name="btn_blth_disconnect">断开连接</string>
+    <string name="connect_state">状态</string>
+    <string name="progress_scaning">正在扫描</string>
+    <string name="progress_connecting">正在连接</string>
+    <string name="send">发送</string>
+    <string name="write_tip">请输入数字、字母或汉字</string>
+    <string name="bluetooth_unopened">蓝牙未开启，请先开启蓝牙</string>
+</resources>

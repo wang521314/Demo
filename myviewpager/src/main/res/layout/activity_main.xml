@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="bo.liu.myviewpager.MainActivity">
+
+
+   <android.support.v7.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/activity_review">
+
+   </android.support.v7.widget.RecyclerView>
+   <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="选择器"
+       android:id="@+id/bt"
+       android:layout_alignParentBottom="true"
+       />
+   <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="二维码"
+       android:id="@+id/ma_bt"
+       android:layout_alignParentBottom="true"
+       android:layout_toRightOf="@+id/bt"/>
+   <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="蓝牙"
+       android:layout_alignParentBottom="true"
+       android:layout_toRightOf="@+id/ma_bt"
+       android:id="@+id/bu_bt"
+       />
+   <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="统计图"
+       android:layout_alignParentBottom="true"
+       android:layout_toRightOf="@+id/bu_bt"
+       android:id="@+id/tj_bt"
+       />
+
+</RelativeLayout>
