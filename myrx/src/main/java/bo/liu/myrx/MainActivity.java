@@ -1,6 +1,7 @@
 package bo.liu.myrx;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -53,6 +54,8 @@ public class MainActivity extends BaseActivity {
     private Button iv;
     private EditText mEdit;
     private FamousInfoModel famousInfoModel;
+    private NewbieGuide nb;
+
     @Override
     public int initContentView() {
         return R.layout.activity_main;
@@ -255,13 +258,24 @@ public class MainActivity extends BaseActivity {
 //                    HoleBean.TYPE_RECTANGLE).show();
 //        }
         Log.d(TAG, "onWindowFocusChanged: x"+x+"y"+y);
+
         NewbieGuide nb = new NewbieGuide(this);
-        nb.setEveryWhereTouchable(false).addIndicateImg(R.mipmap.left_arrow,x+(x/4),y+(y/3)).addHighLightView(iv,HoleBean.TYPE_CIRCLE).addMsgAndKnowTv("haha",CommonUtil.dpToPx(this, 450))
-                .addHighLightView(ma,HoleBean.TYPE_RECTANGLE).show();
+        if (isNeverShowed(this,1)){
+            nb.setEveryWhereTouchable(false).addIndicateImg(R.mipmap.left_arrow,x+(x/4),y+(y/3)).addHighLightView(iv,HoleBean.TYPE_CIRCLE).addMsgAndKnowTv("haha",CommonUtil.dpToPx(this, 450))
+                    .addHighLightView(ma,HoleBean.TYPE_RECTANGLE).show();
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onEventMainThread(EventMode eventMode) {
         ma.setText(eventMode.getText());
+    }
+
+    /**
+     * 判断新手引导也是否已经显示了
+     */
+    public static boolean isNeverShowed(Activity activity, int type) {
+        return activity.getSharedPreferences(TAG, Activity.MODE_PRIVATE).getBoolean(TAG + type, true);
     }
 }
