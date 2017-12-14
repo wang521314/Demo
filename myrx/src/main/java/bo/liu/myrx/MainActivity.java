@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity {
     private EditText mEdit;
     private FamousInfoModel famousInfoModel;
     private NewbieGuide nb;
+    private Button bt;
 
     @Override
     public int initContentView() {
@@ -194,13 +195,11 @@ public class MainActivity extends BaseActivity {
 //            }
 //        });
         initView();
+        initListener();
         famousInfoModel = FamousInfoModel.getInstance(this);
     }
 
-    private void initView() {
-        ma = (TextView) findViewById(R.id.txt_content);
-        iv = (Button) findViewById(R.id.button_search);
-        mEdit = (EditText) findViewById(R.id.edit_keyword);
+    private void initListener() {
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,6 +224,22 @@ public class MainActivity extends BaseActivity {
                 });
             }
         });
+
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(MainActivity.this,SideslipActivity.class);
+                startActivity(in);
+            }
+        });
+    }
+
+    private void initView() {
+        ma = (TextView) findViewById(R.id.txt_content);
+        iv = (Button) findViewById(R.id.button_search);
+        mEdit = (EditText) findViewById(R.id.edit_keyword);
+        bt = (Button) findViewById(R.id.rl_bt);
+
     }
 
     private FamousInfoReq initParams() {
