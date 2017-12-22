@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity {
     private EditText mEdit;
     private FamousInfoModel famousInfoModel;
     private NewbieGuide nb;
-    private Button bt;
+    private Button bt,btTh;
 
     @Override
     public int initContentView() {
@@ -232,6 +232,13 @@ public class MainActivity extends BaseActivity {
                 startActivity(in);
             }
         });
+        btTh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ReceiveActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView() {
@@ -239,6 +246,7 @@ public class MainActivity extends BaseActivity {
         iv = (Button) findViewById(R.id.button_search);
         mEdit = (EditText) findViewById(R.id.edit_keyword);
         bt = (Button) findViewById(R.id.rl_bt);
+        btTh = (Button) findViewById(R.id.rl_bt_th);
 
     }
 

@@ -48,5 +48,13 @@
         android:layout_height="wrap_content"
         android:text="侧滑"
         android:id="@+id/rl_bt"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="拖动item"
+        android:layout_below="@id/rl_cont"
+        android:layout_toRightOf="@id/rl_bt"
+        android:id="@+id/rl_bt_th"
+         />
 
 </RelativeLayout>
