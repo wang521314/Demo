@@ -1,5 +1,6 @@
 package bo.liu.myrx.util;
 
+
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -32,8 +33,8 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
     }
+
     private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {

@@ -1,13 +1,27 @@
 package bo.liu.myrx;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,12 +35,14 @@ import bo.liu.myrx.mode.EventMode;
 import bo.liu.myrx.mode.Subject;
 import bo.liu.myrx.myview.SwipeRecyclerView;
 import bo.liu.myrx.util.CommonUtil;
+
 import bo.liu.myrx.util.OnRecyclerItemClickListener;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
 public class ReceiveActivity extends BaseActivity {
+
 
     private Button tv;
     private static final String TAG = "ReceiveActivity";
@@ -37,6 +53,9 @@ public class ReceiveActivity extends BaseActivity {
     private ArrayList<Subject> datas = new ArrayList<>();
     private ItemTouchHelper mItemTouchHelper;
     private DraAdapater da;
+
+    private int mScreenDensity;
+    private MediaProjectionManager mMediaProjectionManager;
 
     @Override
     public int initContentView() {
@@ -55,22 +74,28 @@ public class ReceiveActivity extends BaseActivity {
         for (int i = 0; i < titles.length; i++) {
             //动态获取资源ID，第一个参数是资源名，第二个参数是资源类型例如drawable，string等，第三个参数包名
             int imageId = getResources().getIdentifier("ic_category_" + i, "mipmap", getPackageName());
-            datas.add(new Subject(titles[i], imageId));
+            datas.add(CommonUtil.<Subject>getSubject(titles[0],imageId));
         }
         da = new DraAdapater(datas, this);
         rv.setAdapter(da);
+
     }
 
     private void initListener() {
         tv.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                EventMode eventMode = new EventMode();
-                eventMode.setText("xisix;");
-                EventBus.getDefault().post(eventMode);
+//                EventMode eventMode = new EventMode();
+//                eventMode.setText("xisix;");
+//                EventBus.getDefault().post(eventMode);
+                Intent intent = new Intent(ReceiveActivity.this, ScreenShotActivity.class);
+                startActivity(intent);
+
             }
         });
-        rv.addOnItemTouchListener(new OnRecyclerItemClickListener(rv) {
+//
+      rv.addOnItemTouchListener(new OnRecyclerItemClickListener(rv) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh) {
 
@@ -151,7 +176,7 @@ public class ReceiveActivity extends BaseActivity {
             public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
                 if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
                     viewHolder.itemView.setBackgroundColor(Color.LTGRAY);
-                    Log.d(TAG, "onSelectedChanged: "+viewHolder.itemView.getWidth());
+                    Log.d(TAG, "onSelectedChanged: " + viewHolder.itemView.getWidth());
                 }
                 super.onSelectedChanged(viewHolder, actionState);
             }
@@ -173,16 +198,17 @@ public class ReceiveActivity extends BaseActivity {
             public void onRightClick(int position, String id) {
                 datas.remove(position);
                 da.notifyDataSetChanged();
-                CommonUtil.setToast(ReceiveActivity.this," position = " + position);
+                CommonUtil.setToast(ReceiveActivity.this, " position = " + position);
             }
         });
     }
-
 
     private void initView() {
         tv = (Button) findViewById(R.id.re_tv);
         rv = (SwipeRecyclerView) findViewById(R.id.re_rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+
 
     }
 
@@ -196,4 +222,16 @@ public class ReceiveActivity extends BaseActivity {
     public void onEventMainThread(EventMode eventMode) {
         Log.d(TAG, "onEventMainThread: " + eventMode.getText());
     }
+
+    /**
+     * 对View截图
+     */
+    public static Bitmap getViewScreenshot(final View view) {
+        Bitmap bmp = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        view.draw(canvas);
+        return bmp;
+    }
+
 }

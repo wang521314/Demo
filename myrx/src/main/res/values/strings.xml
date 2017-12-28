@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">myRx</string>
     <string name="hello_world">nihao</string>
+    <string name="stop">完成</string>
+    <string name="start">开始</string>
 </resources>

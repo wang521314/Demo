@@ -8,11 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
+import android.widget.TextView;
+
 
 import bo.liu.myrx.R;
 import bo.liu.myrx.adapter.DraAdapater;
@@ -24,36 +27,33 @@ import bo.liu.myrx.adapter.DraAdapater;
 
 public class SwipeRecyclerView extends RecyclerView {
 
-    private Context mContext;
-    private int mTouchSlop;
-    private int maxLeft;
-    private Scroller mScroller;
+    private static final String TAG = "RecycleView";
+    private int maxLength, mTouchSlop;
+    private int xDown, yDown, xMove, yMove;
     /**
      * 当前选中的item索引（这个很重要）
      */
     private int curSelectPosition;
+    private Scroller mScroller;
 
-    /**
-     * 是否是第一次touch
-     */
-    private boolean isFirst = true;
     private LinearLayout mCurItemLayout, mLastItemLayout;
-    /**
-     * 记录连续移动的长度
-     */
+    private LinearLayout mLlHidden;//隐藏部分
+    private TextView mItemContent;
+    private LinearLayout mItemDelete;
 
-    private int mMoveWidth=0;
     /**
      * 隐藏部分长度
      */
     private int mHiddenWidth;
-    private LinearLayout mLlHidden;//隐藏的控件
-    private LinearLayout mItemDelete;
-    private int xDown;
-    private int yDown;
-    private int xMove;
-    private int yMove;
-    private static final String TAG = "SwipeRecyclerView";
+    /**
+     * 记录连续移动的长度
+     */
+    private int mMoveWidth = 0;
+    /**
+     * 是否是第一次touch
+     */
+    private boolean isFirst = true;
+    private Context mContext;
 
     /**
      * 删除的监听事件
@@ -64,41 +64,58 @@ public class SwipeRecyclerView extends RecyclerView {
         this.mRightListener = listener;
     }
 
+
     public SwipeRecyclerView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
-    public SwipeRecyclerView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+    public SwipeRecyclerView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public SwipeRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public SwipeRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext =context;
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();//获得触发事件移动触的最短距离，如果小于这个距离就不触发移动控件
-        //得到密度比
-        maxLeft = ((int) (180 * context.getResources().getDisplayMetrics().density + 0.5f));
-        //获取滑动事件，第二个参数是一个差值器，如果用一个参数的构造会默认插值器
-        mScroller = new Scroller(context,new LinearInterpolator(context, null));
+        mContext = context;
+        //滑动到最小距离
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        //滑动的最大距离
+        maxLength = ((int) (180 * context.getResources().getDisplayMetrics().density + 0.5f));
+        //初始化Scroller
+        mScroller = new Scroller(context, new LinearInterpolator(context, null));
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        Log.d(TAG, "dispatchTouchEvent: "+super.dispatchTouchEvent(ev));
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent e) {
+        Log.d(TAG, "onInterceptTouchEvent: "+super.onInterceptTouchEvent(e));
+        return true;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        int x = (int) e.getX();
-        int y = (int) e.getY();
+        int x = (int)e.getX();
+        int y = (int)e.getY();
         switch (e.getAction()){
             case MotionEvent.ACTION_DOWN:
+                //记录当前按下的坐标
                 xDown = x;
                 yDown = y;
+                Log.d(TAG, "onTouchEvent: ++++");
                 //计算选中哪个Item
                 int firstPosition = ((LinearLayoutManager)getLayoutManager()).findFirstVisibleItemPosition();
                 Rect itemRect = new Rect();
-                int count = getChildCount();//获得子控件的个数
-                for (int i=0; i<count; i++) {
+
+                int count = getChildCount();
+                for (int i=0; i<count; i++){
                     final View child = getChildAt(i);
-                    if (child.getVisibility() == View.VISIBLE) {
+                    if (child.getVisibility() == View.VISIBLE){
                         child.getHitRect(itemRect);
-                        if (itemRect.contains(x, y)) {
+                        if (itemRect.contains(x, y)){
                             curSelectPosition = firstPosition + i;
                             break;
                         }
@@ -109,7 +126,6 @@ public class SwipeRecyclerView extends RecyclerView {
                     isFirst = false;
                 }else {
                     //屏幕再次接收到点击时，恢复上一次Item的状态
-
                     if (mLastItemLayout != null && mMoveWidth > 0) {
                         //将Item右移，恢复原位
                         scrollRight(mLastItemLayout, (0 - mMoveWidth));
@@ -119,6 +135,7 @@ public class SwipeRecyclerView extends RecyclerView {
                     }
 
                 }
+
                 //取到当前选中的Item，赋给mCurItemLayout，以便对其进行左移
                 View item = getChildAt(curSelectPosition - firstPosition);
                 if (item != null) {
@@ -126,8 +143,8 @@ public class SwipeRecyclerView extends RecyclerView {
                     DraAdapater.MyHolder viewHolder = (DraAdapater.MyHolder) getChildViewHolder(item);
                     mCurItemLayout = viewHolder.ll_item;
                     //找到具体元素（这与实际业务相关了~~）
-                    mLlHidden = (LinearLayout) mCurItemLayout.findViewById(R.id.ll_hidden);
-                    mItemDelete = (LinearLayout) mCurItemLayout.findViewById(R.id.ll_hidden);
+                    mLlHidden = (LinearLayout)mCurItemLayout.findViewById(R.id.ll_hidden);
+                    mItemDelete = (LinearLayout)mCurItemLayout.findViewById(R.id.ll_hidden);
                     mItemDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -142,12 +159,13 @@ public class SwipeRecyclerView extends RecyclerView {
                     mHiddenWidth = mLlHidden.getWidth();
                 }
                 break;
+
             case MotionEvent.ACTION_MOVE:
                 xMove = x;
                 yMove = y;
                 int dx = xMove - xDown;//为负时：手指向左滑动；为正时：手指向右滑动。这与Android的屏幕坐标定义有关
                 int dy = yMove - yDown;//
-
+                Log.d(TAG, "onTouchEvent: ----");
                 //左滑
                 if (dx < 0 && Math.abs(dx) > mTouchSlop && Math.abs(dy) < mTouchSlop){
                     int newScrollX = Math.abs(dx);
@@ -165,8 +183,9 @@ public class SwipeRecyclerView extends RecyclerView {
                     scrollRight(mCurItemLayout, 0 - mMoveWidth);
                     mMoveWidth = 0;
                 }
+
                 break;
-            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_UP://手抬起时
                 int scrollX = mCurItemLayout.getScrollX();
 
                 if (mHiddenWidth > mMoveWidth) {
@@ -184,17 +203,16 @@ public class SwipeRecyclerView extends RecyclerView {
 
 
         }
+        Log.d(TAG, "onTouchEvent: "+super.onTouchEvent(e));
         return super.onTouchEvent(e);
     }
-    /**
-     * 通过invalidate操纵,此方法通过draw方法调用
-     */
+
+
     @Override
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
 
             Log.e(TAG, "computeScroll getCurrX ->" + mScroller.getCurrX());
-
             mCurItemLayout.scrollBy(mScroller.getCurrX(), 0);
             invalidate();
         }

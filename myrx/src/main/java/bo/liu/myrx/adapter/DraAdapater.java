@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
 import bo.liu.myrx.R;
 import bo.liu.myrx.mode.Subject;
+;
 
 /**
  * Created by Administrator on 2017/12/21 0021.
@@ -24,15 +26,20 @@ public class DraAdapater extends Adapter<DraAdapater.MyHolder> {
 
     private ArrayList<Subject> datas;
     private Context mContext;
-
+    RvOnclickListener mRvOnClickListener;
+    private LayoutInflater mLiLayoutInflater;
     public DraAdapater(ArrayList<Subject> data, Context context) {
         this.datas = data;
         this.mContext = context;
+        this.mLiLayoutInflater = LayoutInflater.from(mContext);
     }
 
+    public void setmRvOnClickListener(RvOnclickListener rvOnClickListener){
+        this.mRvOnClickListener = rvOnClickListener;
+    }
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyHolder hulder = new MyHolder(LayoutInflater.from(mContext).inflate(R.layout.item_linear,parent,false));
+        MyHolder hulder = new MyHolder(mLiLayoutInflater.from(mContext).inflate(R.layout.item_linear,parent,false));
         return hulder;
     }
 
@@ -40,16 +47,38 @@ public class DraAdapater extends Adapter<DraAdapater.MyHolder> {
     public void onBindViewHolder(MyHolder holder, int position) {
         holder.title.setText(datas.get(position).getTitle());
         holder.img.setImageResource(datas.get(position).getImg());
+        holder.ll_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRvOnClickListener != null){
+                     mRvOnClickListener.StartScreen();
+                }
+
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return datas == null ? 0 : datas.size();
     }
-   public class MyHolder extends RecyclerView.ViewHolder{
 
-        private TextView title;
-        private ImageView img;
+//    @Override
+//    public void onItemDelete(int positon) {
+//
+//    }
+//
+//    @Override
+//    public void onMove(int fromPosition, int toPosition) {
+//
+//        Collections.swap(datas,fromPosition,toPosition);//交换数据
+//        notifyItemMoved(fromPosition,toPosition);
+//    }
+
+    public class MyHolder extends RecyclerView.ViewHolder{
+
+         TextView title;
+         ImageView img;
        public LinearLayout ll_item,ll_hidden;
 
        public MyHolder(View itemView) {
@@ -63,5 +92,9 @@ public class DraAdapater extends Adapter<DraAdapater.MyHolder> {
             ll_item = (LinearLayout) itemView.findViewById(R.id.ll_item);
             ll_hidden = (LinearLayout) itemView.findViewById(R.id.ll_hidden);
         }
+    }
+
+    interface RvOnclickListener{
+        void  StartScreen();
     }
 }

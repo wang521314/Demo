@@ -11,6 +11,7 @@
 
     </bo.liu.myrx.myview.SwipeRecyclerView>
 
+
     <Button
         android:id="@+id/re_tv"
         android:layout_width="wrap_content"
