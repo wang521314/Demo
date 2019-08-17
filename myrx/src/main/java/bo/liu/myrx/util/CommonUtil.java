@@ -3,10 +3,15 @@ package bo.liu.myrx.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+
+import bo.liu.myrx.mode.Subject;
+import retrofit2.http.GET;
 
 /**
  * Created by Administrator on 2017/11/28 0028.
@@ -14,7 +19,7 @@ import java.lang.reflect.Field;
 
 public class CommonUtil {
 
-
+    private static final String TAG = "CommonUtil";
     private CommonUtil (){
         throw new AssertionError();
     }
@@ -34,6 +39,13 @@ public class CommonUtil {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
     }
 
+    public static <T>T getSubject(String title, int img){
+        if (!TextUtils.isEmpty(title)){
+            Log.d(TAG, "getSubject: "+TextUtils.isEmpty(title));
+        }
+        Log.d(TAG, "getSubject: "+TextUtils.isEmpty(title)+title+"3333");
+        return (T) new Subject(title,img);
+    }
     /**
      * 获取屏幕宽度
      */

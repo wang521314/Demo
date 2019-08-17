@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "app",
+  "main": "index.android.js",
+  "scripts": {
+    "test": "no"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wang521314/Demo.git"
+  },
+  "keywords": [
+    "no"
+  ],
+  "author": "song",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wang521314/Demo/issues"
+  },
+  "homepage": "https://github.com/wang521314/Demo#readme"
+}

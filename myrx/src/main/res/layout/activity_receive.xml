@@ -4,15 +4,23 @@
     android:layout_height="match_parent"
     tools:context="bo.liu.myrx.ReceiveActivity">
 
+    <bo.liu.myrx.myview.SwipeRecyclerView
+        android:id="@+id/re_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </bo.liu.myrx.myview.SwipeRecyclerView>
+
 
     <Button
+        android:id="@+id/re_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/re_tv"
-        android:textSize="20sp"
-        android:text="发送"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignBottom="@+id/re_rv"
+        android:text="发送"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>

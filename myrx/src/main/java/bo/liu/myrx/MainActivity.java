@@ -1,6 +1,7 @@
 package bo.liu.myrx;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -53,6 +54,9 @@ public class MainActivity extends BaseActivity {
     private Button iv;
     private EditText mEdit;
     private FamousInfoModel famousInfoModel;
+    private NewbieGuide nb;
+    private Button bt,btTh;
+
     @Override
     public int initContentView() {
         return R.layout.activity_main;
@@ -191,13 +195,11 @@ public class MainActivity extends BaseActivity {
 //            }
 //        });
         initView();
+        initListener();
         famousInfoModel = FamousInfoModel.getInstance(this);
     }
 
-    private void initView() {
-        ma = (TextView) findViewById(R.id.txt_content);
-        iv = (Button) findViewById(R.id.button_search);
-        mEdit = (EditText) findViewById(R.id.edit_keyword);
+    private void initListener() {
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,6 +224,30 @@ public class MainActivity extends BaseActivity {
                 });
             }
         });
+
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(MainActivity.this,SideslipActivity.class);
+                startActivity(in);
+            }
+        });
+        btTh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ReceiveActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initView() {
+        ma = (TextView) findViewById(R.id.txt_content);
+        iv = (Button) findViewById(R.id.button_search);
+        mEdit = (EditText) findViewById(R.id.edit_keyword);
+        bt = (Button) findViewById(R.id.rl_bt);
+        btTh = (Button) findViewById(R.id.rl_bt_th);
+
     }
 
     private FamousInfoReq initParams() {
@@ -255,13 +281,24 @@ public class MainActivity extends BaseActivity {
 //                    HoleBean.TYPE_RECTANGLE).show();
 //        }
         Log.d(TAG, "onWindowFocusChanged: x"+x+"y"+y);
+
         NewbieGuide nb = new NewbieGuide(this);
-        nb.setEveryWhereTouchable(false).addIndicateImg(R.mipmap.left_arrow,x+(x/4),y+(y/3)).addHighLightView(iv,HoleBean.TYPE_CIRCLE).addMsgAndKnowTv("haha",CommonUtil.dpToPx(this, 450))
-                .addHighLightView(ma,HoleBean.TYPE_RECTANGLE).show();
+        if (isNeverShowed(this,1)){
+            nb.setEveryWhereTouchable(false).addIndicateImg(R.mipmap.left_arrow,x+(x/4),y+(y/3)).addHighLightView(iv,HoleBean.TYPE_CIRCLE).addMsgAndKnowTv("haha",CommonUtil.dpToPx(this, 450))
+                    .addHighLightView(ma,HoleBean.TYPE_RECTANGLE).show();
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onEventMainThread(EventMode eventMode) {
         ma.setText(eventMode.getText());
+    }
+
+    /**
+     * 判断新手引导也是否已经显示了
+     */
+    public static boolean isNeverShowed(Activity activity, int type) {
+        return activity.getSharedPreferences(TAG, Activity.MODE_PRIVATE).getBoolean(TAG + type, true);
     }
 }
